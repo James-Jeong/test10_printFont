@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
 
 ///////////////////////////////////////////////////////
 /// Definition & Macro
@@ -18,6 +19,7 @@ unsigned char fonts[256][MAX_FONT_BYTE] = {{ 0 }};
 /// Predefinition of Local Functions
 ///////////////////////////////////////////////////////
 
+void Invert2(unsigned char targetChar);
 void PrintFont(unsigned char targetChar);
 void Underline(unsigned char targetChar);
 void Invert(unsigned char targetChar);
@@ -49,14 +51,11 @@ int main()
 	printf("\n[Default]\n");
 	PrintFont('A');
 
-	printf("\n[Bold]\n");
-	Bold('A');
-
 	printf("\n[Underline]\n");
 	Underline('A');
 
-	printf("\n[Invert]\n");
-	Invert('A');
+	printf("\n[Bold]\n");
+	Bold('A');
 
 	printf("\n[Italic]\n");
 	Italic('A');
@@ -64,7 +63,32 @@ int main()
 	printf("\n[Outline]\n");
 	Outline('A');
 
+
+	int i = 0;
+	long int totalResult1 = 0, totalResult2 = 0;
+	for( ; i < 50000; i++)
+	{
+		struct timeval start1, end1, start2, end2;
+		long int result1, result2;
+
+		printf("\n[Invert]\n");
+		gettimeofday(&start1, NULL);
+		Invert('A');
+		gettimeofday(&end1, NULL);
+		result1 = end1.tv_usec - start1.tv_usec;
+		if(result1 > 0) totalResult1 += result1;
+
+		printf("\n[Invert2]\n");
+		gettimeofday(&start2, NULL);
+		Invert('A');
+		gettimeofday(&end2, NULL);
+		result2 = end2.tv_usec - start2.tv_usec;
+		if(result2 > 0) totalResult2 += result2;
+	}
+
 	printf("\n");
+	printf("invert1 : %ld(usec)\n", totalResult1);
+	printf("invert2 : %ld(usec)\n", totalResult2);
 	return 1;
 }
 
@@ -75,7 +99,6 @@ int main()
 /**
  * @fn void PrintFont(unsigned char targetChar)
  * @brief 특정 문자에 대한 폰트 데이터를 화면에 출력하는 함수
- * 문자를 기본 폰트 스타일로 출력한다.
  * @param targetChar 화면에 출력할 문자(입력)
  * @return 반환값 없음
  */
@@ -118,7 +141,7 @@ void Underline(unsigned char targetChar)
 /**
  * @fn void Invert(unsigned char targetChar)
  * @brief 특정 문자의 폰트 데이터를 invert 스타일로 변경해서 출력하는 함수
- * 문자 영역을 출력하지 않고, 문자를 제외한 모든 영역을 출력한다.
+ * 문자를 제외한 모든 영역을 출력한다.
  * @param targetChar 해당 폰트 스타일로 변경 후 출력할 문자(입력)
  * @return 반환값 없음
  */
@@ -136,6 +159,29 @@ void Invert(unsigned char targetChar)
 	{
 		fonts[targetChar][bytePos] = (unsigned char)(~fonts[targetChar][bytePos]);
 	}
+}
+
+/**
+ * @fn void Invert2(unsigned char targetChar)
+ * @brief 특정 문자의 폰트 데이터를 invert 스타일로 변경해서 출력하는 함수
+ * 문자를 제외한 모든 영역을 출력한다.
+ * @param targetChar 해당 폰트 스타일로 변경 후 출력할 문자(입력)
+ * @return 반환값 없음
+ */
+void Invert2(unsigned char targetChar)
+{
+	int bytePos = 0;
+	unsigned char originalFont[1][MAX_FONT_BYTE] = {{ 0 }};
+	memcpy(originalFont[0], fonts[targetChar], MAX_FONT_BYTE);
+
+	for( ; bytePos < MAX_FONT_BYTE; bytePos++)
+	{
+		fonts[targetChar][bytePos] = (unsigned char)(~fonts[targetChar][bytePos]);
+	}
+
+	PrintFont(targetChar);
+
+	memcpy(fonts[targetChar], originalFont[0], MAX_FONT_BYTE);
 }
 
 /**
@@ -170,7 +216,7 @@ void Bold(unsigned char targetChar)
  */
 void Italic(unsigned char targetChar)
 {
-	int bytePos = 1;
+	int bytePos = 0;
 	int rightShiftCount = MAX_FONT_BYTE - 3;
 	unsigned char originalFont[1][MAX_FONT_BYTE] = {{ 0 }};
 	memcpy(originalFont[0], fonts[targetChar], MAX_FONT_BYTE);
@@ -190,7 +236,7 @@ void Italic(unsigned char targetChar)
 /**
  * @fn void Outline(unsigned char targetChar)
  * @brief 특정 문자의 폰트 데이터를 outline 스타일로 변경해서 출력하는 함수
- * 문자 영역을 출력하지 않고, 문자의 테두리 영역만 출력한다.
+ * 문자의 테두리 영역만 출력한다.
  * @param targetChar 해당 폰트 스타일로 변경 후 출력할 문자(입력)
  * @return 반환값 없음
  */
