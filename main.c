@@ -8,6 +8,8 @@
 
 // 출력할 폰트 데이터의 바이트 수
 #define NUM_OF_BYTE 8
+// 1 바이트 당 비트 수
+#define NUM_OF_BIT 8
 
 // 폰트 데이터를 저장할 이중 배열
 // 아스키 코드 256 개에 대한 8 바이트의 폰트 데이터를 저장
@@ -36,17 +38,14 @@ void Outline(unsigned char targetChar);
  */
 int main()
 {
-	fonts['A'][0] = 0x00;
-	fonts['A'][1] = 0x10;
-	fonts['A'][2] = 0x28;
-	fonts['A'][3] = 0x44;
-	fonts['A'][4] = 0x7C;
-	fonts['A'][5] = 0x44;
-	fonts['A'][6] = 0x44;
-	fonts['A'][7] = 0x00;
-
-//	long int result = 0;
-//	struct timeval start, end;
+	fonts['A'][0] = 0x00; // 0000 0000
+	fonts['A'][1] = 0x10; // 0001 0000
+	fonts['A'][2] = 0x28; // 0010 1000
+	fonts['A'][3] = 0x44; // 0100 0100
+	fonts['A'][4] = 0x7C; // 0111 1100
+	fonts['A'][5] = 0x44; // 0100 0100
+	fonts['A'][6] = 0x44; // 0100 0100
+	fonts['A'][7] = 0x00; // 0000 0000
 
 	printf("\n[Default]\n");
 	PrintFont('A');
@@ -55,11 +54,7 @@ int main()
 	Underline('A');
 
 	printf("\n[Invert]\n");
-//	gettimeofday(&start, NULL);
 	Invert('A');
-//	gettimeofday(&end, NULL);
-//	result = (long int)(end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec);
-//	printf("%ld(micro)\n", result);
 
 	printf("\n[Bold]\n");
 	Bold('A');
@@ -93,9 +88,9 @@ void PrintFont(unsigned char targetChar)
 	printf("------------\n");
 	for( ; row < NUM_OF_BYTE; row++)
 	{
-		mask = 0x80;
+		mask = 0x80; // 1000 0000
 		printf("%02X |", (unsigned int)(fonts[targetChar][row]));
-		for( column = 0; column < NUM_OF_BYTE; column++)
+		for( column = 0; column < NUM_OF_BIT; column++)
 		{
 			printf("%c", ((unsigned long int)(fonts[targetChar][row]) & mask) == 0 ? ' ' : '#');
 			mask >>= 1;
@@ -112,9 +107,9 @@ void PrintFont(unsigned char targetChar)
  */
 void Underline(unsigned char targetChar)
 {
-	fonts[targetChar][7] = 0xFF;
+	fonts[targetChar][NUM_OF_BYTE - 1] = 0xFF; // 1111 1111
 	PrintFont(targetChar);
-	fonts[targetChar][7] = 0x00;
+	fonts[targetChar][NUM_OF_BYTE - 1] = 0x00; // 0000 0000
 }
 
 /**
@@ -125,17 +120,17 @@ void Underline(unsigned char targetChar)
  */
 void Invert(unsigned char targetChar)
 {
-	int bitPos = 0;
-	for( ; bitPos < NUM_OF_BYTE; bitPos++)
+	int bytePos = 0;
+	for( ; bytePos < NUM_OF_BYTE; bytePos++)
 	{
-		fonts[targetChar][bitPos] = (unsigned char)(~fonts[targetChar][bitPos]);
+		fonts[targetChar][bytePos] = (unsigned char)(~fonts[targetChar][bytePos]);
 	}
 
 	PrintFont(targetChar);
 
-	for(bitPos = 0; bitPos < NUM_OF_BYTE; bitPos++)
+	for(bytePos = 0; bytePos < NUM_OF_BYTE; bytePos++)
 	{
-		fonts[targetChar][bitPos] = (unsigned char)(~fonts[targetChar][bitPos]);
+		fonts[targetChar][bytePos] = (unsigned char)(~fonts[targetChar][bytePos]);
 	}
 }
 
@@ -147,13 +142,13 @@ void Invert(unsigned char targetChar)
  */
 void Bold(unsigned char targetChar)
 {
-	int bitPos = 0;
-	unsigned char tempFont[1][NUM_OF_BYTE];
+	int bytePos = 0;
+	unsigned char tempFont[1][NUM_OF_BYTE] = {{ 0 }};
 	memcpy(tempFont[0], fonts[targetChar], NUM_OF_BYTE);
 
-	for( ; bitPos < NUM_OF_BYTE; bitPos++)
+	for( ; bytePos < NUM_OF_BYTE; bytePos++)
 	{
-		fonts[targetChar][bitPos] = fonts[targetChar][bitPos] | (fonts[targetChar][bitPos] >> 1);
+		fonts[targetChar][bytePos] = fonts[targetChar][bytePos] | (fonts[targetChar][bytePos] >> 1);
 	}
 
 	PrintFont(targetChar);
@@ -169,15 +164,15 @@ void Bold(unsigned char targetChar)
  */
 void Italic(unsigned char targetChar)
 {
-	int bitPos = 0;
-	int italicCount = 5;
-	unsigned char tempFont[1][NUM_OF_BYTE];
+	int bytePos = 0;
+	int rightShiftCount = 5;
+	unsigned char tempFont[1][NUM_OF_BYTE] = {{ 0 }};
 	memcpy(tempFont[0], fonts[targetChar], NUM_OF_BYTE);
 
-	for( ; bitPos < 5; bitPos++)
+	for( ; bytePos < 5; bytePos++)
 	{
-		fonts[targetChar][bitPos] = (unsigned char)(fonts[targetChar][bitPos] >> italicCount / 2);
-		italicCount--;
+		fonts[targetChar][bytePos] = (unsigned char)(fonts[targetChar][bytePos] >> (rightShiftCount / 2));
+		rightShiftCount--;
 	}
 	fonts[targetChar][6] = (unsigned char)(fonts[targetChar][6] << 1);
 
@@ -194,18 +189,18 @@ void Italic(unsigned char targetChar)
  */
 void Outline(unsigned char targetChar)
 {
-	int bitPos = 0;
-	unsigned char tempFont[1][NUM_OF_BYTE];
+	int bytePos = 0;
+	unsigned char tempFont[1][NUM_OF_BYTE] = {{ 0 }};
 	memcpy(tempFont[0], fonts[targetChar], NUM_OF_BYTE);
 
-	for( ; bitPos < NUM_OF_BYTE; bitPos++)
+	for( ; bytePos < NUM_OF_BYTE; bytePos++)
 	{
-		fonts[targetChar][bitPos] = fonts[targetChar][bitPos] | (unsigned char)(fonts[targetChar][bitPos] >> 1);
-		fonts[targetChar][bitPos] = fonts[targetChar][bitPos] | (unsigned char)(fonts[targetChar][bitPos] << 1);
-		fonts[targetChar][bitPos] = fonts[targetChar][bitPos] ^ tempFont[0][bitPos];
+		fonts[targetChar][bytePos] = fonts[targetChar][bytePos] | (unsigned char)(fonts[targetChar][bytePos] >> 1);
+		fonts[targetChar][bytePos] = fonts[targetChar][bytePos] | (unsigned char)(fonts[targetChar][bytePos] << 1);
+		fonts[targetChar][bytePos] = fonts[targetChar][bytePos] ^ tempFont[0][bytePos];
 	}
 	fonts[targetChar][0] = 0x38; // 0011 1000
-	fonts[targetChar][7] = 0xee; // 1110 1110
+	fonts[targetChar][NUM_OF_BYTE - 1] = 0xee; // 1110 1110
 
 	PrintFont(targetChar);
 
