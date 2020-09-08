@@ -103,6 +103,7 @@ void PrintFont(unsigned char targetChar)
 /**
  * @fn void Underline(unsigned char targetChar)
  * @brief 특정 문자의 폰트 데이터를 underline 스타일로 변경해서 출력하는 함수
+ * 문자의 최하단에 밑줄을 그려서 출력한다.
  * @param targetChar 해당 폰트 스타일로 변경 후 출력할 문자(입력)
  * @return 반환값 없음
  */
@@ -116,6 +117,7 @@ void Underline(unsigned char targetChar)
 /**
  * @fn void Invert(unsigned char targetChar)
  * @brief 특정 문자의 폰트 데이터를 invert 스타일로 변경해서 출력하는 함수
+ * 문자를 제외한 모든 영역을 출력한다.
  * @param targetChar 해당 폰트 스타일로 변경 후 출력할 문자(입력)
  * @return 반환값 없음
  */
@@ -138,6 +140,7 @@ void Invert(unsigned char targetChar)
 /**
  * @fn void Bold(unsigned char targetChar)
  * @brief 특정 문자의 폰트 데이터를 bold 스타일로 변경해서 출력하는 함수
+ * 문자를 짙게 출력한다.
  * @param targetChar 해당 폰트 스타일로 변경 후 출력할 문자(입력)
  * @return 반환값 없음
  */
@@ -160,6 +163,7 @@ void Bold(unsigned char targetChar)
 /**
  * @fn void Italic(unsigned char targetChar)
  * @brief 특정 문자의 폰트 데이터를 italic 스타일로 변경해서 출력하는 함수
+ * 문자를 오른쪽으로 기울여서 출력한다.
  * @param targetChar 해당 폰트 스타일로 변경 후 출력할 문자(입력)
  * @return 반환값 없음
  */
@@ -185,6 +189,7 @@ void Italic(unsigned char targetChar)
 /**
  * @fn void Outline(unsigned char targetChar)
  * @brief 특정 문자의 폰트 데이터를 outline 스타일로 변경해서 출력하는 함수
+ * 문자의 테두리 영역만 출력한다.
  * @param targetChar 해당 폰트 스타일로 변경 후 출력할 문자(입력)
  * @return 반환값 없음
  */
