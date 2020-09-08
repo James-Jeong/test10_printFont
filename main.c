@@ -93,11 +93,11 @@ void PrintFont(unsigned char targetChar)
 	printf("------------\n");
 	for( ; row < NUM_OF_BYTE; row++)
 	{
-		mask = 0x1000000000000000;
+		mask = 0x80;
 		printf("%02X |", (unsigned int)(fonts[targetChar][row]));
-		for( column = 0; column < 128; column++)
+		for( column = 0; column < NUM_OF_BYTE; column++)
 		{
-			if(column > 52 && column < 61) printf("%c", ((unsigned long int)(fonts[targetChar][row]) & mask) == 0 ? ' ' : '#');
+			printf("%c", ((unsigned long int)(fonts[targetChar][row]) & mask) == 0 ? ' ' : '#');
 			mask >>= 1;
 		}
 		printf("\n");
@@ -204,8 +204,8 @@ void Outline(unsigned char targetChar)
 		fonts[targetChar][bitPos] = fonts[targetChar][bitPos] | (unsigned char)(fonts[targetChar][bitPos] << 1);
 		fonts[targetChar][bitPos] = fonts[targetChar][bitPos] ^ tempFont[0][bitPos];
 	}
-	fonts[targetChar][0] = 0x38;
-	fonts[targetChar][7] = 0xee;
+	fonts[targetChar][0] = 0x38; // 0011 1000
+	fonts[targetChar][7] = 0xee; // 1110 1110
 
 	PrintFont(targetChar);
 
