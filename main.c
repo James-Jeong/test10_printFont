@@ -171,7 +171,7 @@ void Bold(unsigned char targetChar)
 void Italic(unsigned char targetChar)
 {
 	int bytePos = 1;
-	int rightShiftCount = MAX_FONT_BYTE - 3;
+	int rightShiftCount = MAX_FONT_BYTE - 4;
 	unsigned char originalFont[1][MAX_FONT_BYTE] = {{ 0 }};
 	memcpy(originalFont[0], fonts[targetChar], MAX_FONT_BYTE);
 
