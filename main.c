@@ -1,10 +1,17 @@
 #include <stdio.h>
+#include <sys/time.h>
 
 ///////////////////////////////////////////////////////
 /// Definition & Macro
 ///////////////////////////////////////////////////////
 
 unsigned char fonts[256][8];
+
+///////////////////////////////////////////////////////
+/// Predefinition of Static Function
+///////////////////////////////////////////////////////
+
+static void CopyFont(unsigned char *dstFont, unsigned char *srcFont);
 
 ///////////////////////////////////////////////////////
 /// Predefinition of Local Functions
@@ -32,11 +39,36 @@ int main()
 	fonts['A'][6] = 0x44;
 	fonts['A'][7] = 0x00;
 
+	long int result = 0;
+	struct timeval start, end;
+
+	printf("\n[Default]\n");
 	PrintFont('A');
+
+	printf("\n[Underline]\n");
 	Underline('A');
+
+	printf("\n[Invert]\n");
+	gettimeofday(&start, NULL);
 	Invert('A');
+	gettimeofday(&end, NULL);
+	result = (long int)(end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec);
+	printf("%ld(micro)\n", result);
+
+	printf("\n[Invert2]\n");
+	gettimeofday(&start, NULL);
+	Invert2('A');
+	gettimeofday(&end, NULL);
+	result = (long int)(end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec);
+	printf("%ld(micro)\n", result);
+
+	printf("\n[Bold]\n");
 	Bold('A');
+
+	printf("\n[Italic]\n");
 	Italic('A');
+
+	printf("\n[Outline]\n");
 	Outline('A');
 
 	return 1;
@@ -48,189 +80,116 @@ int main()
 
 void PrintFont(unsigned char c)
 {
-	unsigned long int mask = 0;
 	int row = 0;
 	int column = 0;
+	unsigned long int mask = 0;
 
-	printf("\n[Default]\n");
+	printf("   |84218421\n");
+	printf("------------\n");
 	for( ; row < 8; row++)
 	{
 		mask = 0x1000000000000000;
 		printf("%02X |", (unsigned int)(fonts[c][row]));
 		for( column = 0; column < 128; column++)
 		{
-			if(column > 52 && column < 60) printf("%c", ((unsigned long int)(fonts[c][row]) & mask) == 0 ? ' ' : '#');
+			if(column > 52 && column < 61) printf("%c", ((unsigned long int)(fonts[c][row]) & mask) == 0 ? ' ' : '#');
 			mask >>= 1;
 		}
 		printf("\n");
 	}
-	printf("\n");
 }
 
 void Underline(unsigned char c)
 {
-	unsigned long int mask = 0;
-	int row = 0;
-	int column = 0;
-
-	printf("\n[Underline]\n");
 	fonts[c][7] = 0xFF;
-	for( ; row < 8; row++)
-	{
-		mask = 0x1000000000000000;
-		printf("%02X |", (unsigned int)(fonts[c][row]));
-		for( column = 0; column < 128; column++)
-		{
-			if(column > 52 && column < 60) printf("%c", ((unsigned long int)(fonts[c][row]) & mask) == 0 ? ' ' : '#');
-			mask >>= 1;
-		}
-		printf("\n");
-	}
+	PrintFont(c);
 	fonts[c][7] = 0x00;
-	printf("\n");
 }
 
 void Invert(unsigned char c)
 {
-	unsigned long int mask = 0;
-	int row = 0;
-	int column = 0;
-	int bytePos = 0;
-
-	for( ; bytePos < 8; bytePos++)
+	int bitPos = 0;
+	for( ; bitPos < 8; bitPos++)
 	{
-		fonts[c][bytePos] = ~fonts[c][bytePos];
+		fonts[c][bitPos] = (unsigned char)(~fonts[c][bitPos]);
 	}
 
-	printf("\n[Invert]\n");
-	for( ; row < 8; row++)
-	{
-		mask = 0x1000000000000000;
-		printf("%02X |", (unsigned int)(fonts[c][row]));
-		for( column = 0; column < 128; column++)
-		{
-			if(column > 52 && column < 60) printf("%c", ((unsigned long int)(fonts[c][row]) & mask) == 0 ? ' ' : '#');
-			mask >>= 1;
-		}
-		printf("\n");
-	}
-	printf("\n");
+	PrintFont(c);
 
-	for(bytePos = 0; bytePos < 8; bytePos++)
+	for(bitPos = 0; bitPos < 8; bitPos++)
 	{
-		fonts[c][bytePos] = ~fonts[c][bytePos];
+		fonts[c][bitPos] = (unsigned char)(~fonts[c][bitPos]);
 	}
 }
 
 void Bold(unsigned char c)
 {
-	unsigned long int mask = 0;
-	int row = 0;
-	int column = 0;
-	int bytePos = 0;
+	int bitPos = 0;
+	unsigned char tempFont[1][8];
 
-	unsigned char backUpFont[1][8];
+	CopyFont(tempFont[0], fonts[c]);
 
-	for( ; bytePos < 8; bytePos++)
+	for( ; bitPos < 8; bitPos++)
 	{
-		backUpFont[0][bytePos] = fonts[c][bytePos];
-		fonts[c][bytePos] = fonts[c][bytePos] | (fonts[c][bytePos] >> 1);
+		fonts[c][bitPos] = fonts[c][bitPos] | (fonts[c][bitPos] >> 1);
 	}
 
-	printf("\n[Bold]\n");
-	for( ; row < 8; row++)
-	{
-		mask = 0x1000000000000000;
-		printf("%02X |", (unsigned int)(fonts[c][row]));
-		for( column = 0; column < 128; column++)
-		{
-			if(column > 52 && column < 60) printf("%c", ((unsigned long int)(fonts[c][row]) & mask) == 0 ? ' ' : '#');
-			mask >>= 1;
-		}
-		printf("\n");
-	}
-	printf("\n");
+	PrintFont(c);
 
-	for(bytePos = 0; bytePos < 8; bytePos++)
-	{
-		fonts[c][bytePos] = backUpFont[0][bytePos];
-	}
+	CopyFont(fonts[c], tempFont[0]);
 }
 
 void Italic(unsigned char c)
 {
-	unsigned long int mask = 0;
-	int row = 0;
-	int column = 0;
-	int bytePos = 0;
+	int bitPos = 0;
 	int italicCount = 5;
+	unsigned char tempFont[1][8];
 
-	for( ; bytePos < 5; bytePos++)
+	CopyFont(tempFont[0], fonts[c]);
+
+	for( ; bitPos < 5; bitPos++)
 	{
-		fonts[c][bytePos] >>= italicCount / 2;
+		fonts[c][bitPos] = (unsigned char)(fonts[c][bitPos] >> italicCount / 2);
 		italicCount--;
 	}
-	fonts[c][6] <<= 1; 
+	fonts[c][6] = (unsigned char)(fonts[c][6] << 1);
 
-	printf("\n[Italic]\n");
-	for( ; row < 8; row++)
-	{
-		mask = 0x1000000000000000;
-		printf("%02X |", (unsigned int)(fonts[c][row]));
-		for( column = 0; column < 128; column++)
-		{
-			if(column > 52 && column < 60) printf("%c", ((unsigned long int)(fonts[c][row]) & mask) == 0 ? ' ' : '#');
-			mask >>= 1;
-		}
-		printf("\n");
-	}
-	
-	italicCount = 5;
-	for(bytePos = 0; bytePos < 5; bytePos++)
-	{
-		fonts[c][bytePos] <<= italicCount / 2;
-		italicCount--;
-	}
-	fonts[c][6] >>= 1;
+	PrintFont(c);
 
-	printf("\n");
+	CopyFont(fonts[c], tempFont[0]);
 }
 
 void Outline(unsigned char c)
 {
-	unsigned long int mask = 0;
-	int row = 0;
-	int column = 0;
-	int bytePos = 0;
-	unsigned char backUpFont[1][8];
+	int bitPos = 0;
+	unsigned char tempFont[1][8];
 
-	for( ; bytePos < 8; bytePos++)
+	CopyFont(tempFont[0], fonts[c]);
+
+	for( ; bitPos < 8; bitPos++)
 	{
-		backUpFont[0][bytePos] = fonts[c][bytePos];
-		fonts[c][bytePos] = fonts[c][bytePos] | (fonts[c][bytePos] >> 1);
-		fonts[c][bytePos] = fonts[c][bytePos] | (fonts[c][bytePos] << 1);
-		fonts[c][bytePos] = fonts[c][bytePos] ^ backUpFont[0][bytePos];
+		fonts[c][bitPos] = fonts[c][bitPos] | (unsigned char)(fonts[c][bitPos] >> 1);
+		fonts[c][bitPos] = fonts[c][bitPos] | (unsigned char)(fonts[c][bitPos] << 1);
+		fonts[c][bitPos] = fonts[c][bitPos] ^ tempFont[0][bitPos];
 	}
 	fonts[c][0] = 0x38;
 	fonts[c][7] = 0xee;
 
-	printf("\n[Outline]\n");
-	for( ; row < 8; row++)
-	{
-		mask = 0x1000000000000000;
-		printf("%02X |", (unsigned int)(fonts[c][row]));
-		for( column = 0; column < 128; column++)
-		{
-			if(column > 52 && column < 60) printf("%c", ((unsigned long int)(fonts[c][row]) & mask) == 0 ? ' ' : '#');
-			mask >>= 1;
-		}
-		printf("\n");
-	}
-	printf("\n");
+	PrintFont(c);
 
-	for(bytePos = 0; bytePos < 8; bytePos++)
+	CopyFont(fonts[c], tempFont[0]);
+}
+
+///////////////////////////////////////////////////////
+/// Static Function
+///////////////////////////////////////////////////////
+
+static void CopyFont(unsigned char *dstFont, unsigned char *srcFont)
+{
+	int bitPos = 0;
+	for( ; bitPos < 8; bitPos++)
 	{
-		fonts[c][bytePos] = backUpFont[0][bytePos];
+		dstFont[bitPos] = srcFont[bitPos];
 	}
 }
 
