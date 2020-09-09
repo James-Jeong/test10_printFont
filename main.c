@@ -16,7 +16,7 @@ unsigned char fonts[256][MAX_FONT_BYTE] = {{ 0 }};
 
 ///////////////////////////////////////////////////////
 /// Predefinition of Local Functions
-///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
 
 void PrintFont(unsigned char targetChar);
 void Underline(unsigned char targetChar);
@@ -45,7 +45,80 @@ int main()
 	fonts['A'][6] = 0x44; // 0100 0100
 	fonts['A'][7] = 0x00; // 0000 0000
 
+	fonts['B'][0] = 0x00; // 0000 0000
+	fonts['B'][1] = 0x78; // 0111 1000
+	fonts['B'][2] = 0x44; // 0100 0100
+	fonts['B'][3] = 0x44; // 0100 0100
+	fonts['B'][4] = 0x78; // 0111 1000
+	fonts['B'][5] = 0x44; // 0100 0100
+	fonts['B'][6] = 0x78; // 0111 1000
+	fonts['B'][7] = 0x00; // 0000 0000
 
+	fonts['C'][0] = 0x00; // 0000 0000
+	fonts['C'][1] = 0x7E; // 0111 1110
+	fonts['C'][2] = 0x40; // 0100 0000
+	fonts['C'][3] = 0x40; // 0100 0000
+	fonts['C'][4] = 0x40; // 0100 0000
+	fonts['C'][5] = 0x40; // 0100 0000
+	fonts['C'][6] = 0x7E; // 0111 1110
+	fonts['C'][7] = 0x00; // 0000 0000
+
+	fonts['D'][0] = 0x00; // 0000 0000
+	fonts['D'][1] = 0x7C; // 0111 1100
+	fonts['D'][2] = 0x42; // 0100 0010
+	fonts['D'][3] = 0x42; // 0100 0010
+	fonts['D'][4] = 0x42; // 0100 0010
+	fonts['D'][5] = 0x42; // 0100 0010
+	fonts['D'][6] = 0x7C; // 0111 1100
+	fonts['D'][7] = 0x00; // 0000 0000
+
+	fonts['E'][0] = 0x00; // 0000 0000
+	fonts['E'][1] = 0x7E; // 0111 1110
+	fonts['E'][2] = 0x40; // 0100 0000
+	fonts['E'][3] = 0x40; // 0100 0000
+	fonts['E'][4] = 0x7E; // 0111 1110
+	fonts['E'][5] = 0x40; // 0100 0000
+	fonts['E'][6] = 0x7E; // 0111 1110
+	fonts['E'][7] = 0x00; // 0000 0000
+
+	fonts['H'][0] = 0x00; // 0000 0000
+	fonts['H'][1] = 0x42; // 0100 0010
+	fonts['H'][2] = 0x42; // 0100 0010
+	fonts['H'][3] = 0x42; // 0100 0010
+	fonts['H'][4] = 0x7E; // 0111 1110
+	fonts['H'][5] = 0x42; // 0100 0010
+	fonts['H'][6] = 0x42; // 0100 0010
+	fonts['H'][7] = 0x00; // 0000 0000
+
+	fonts['J'][0] = 0x00; // 0000 0000
+	fonts['J'][1] = 0x7E; // 0111 1110
+	fonts['J'][2] = 0x08; // 0000 1000
+	fonts['J'][3] = 0x08; // 0000 1000
+	fonts['J'][4] = 0x08; // 0000 1000
+	fonts['J'][5] = 0x28; // 0010 1000
+	fonts['J'][6] = 0x18; // 0001 1000
+	fonts['J'][7] = 0x00; // 0000 0000
+
+	fonts['X'][0] = 0x00; // 0000 0000
+	fonts['X'][1] = 0x42; // 0100 0010
+	fonts['X'][2] = 0x24; // 0010 0100
+	fonts['X'][3] = 0x18; // 0001 1000
+	fonts['X'][4] = 0x18; // 0001 1000
+	fonts['X'][5] = 0x24; // 0010 0100
+	fonts['X'][6] = 0x42; // 0100 0010
+	fonts['X'][7] = 0x00; // 0000 0000
+
+	fonts['a'][0] = 0x00; // 0000 0000
+	fonts['a'][1] = 0x3C; // 0011 1100
+	fonts['a'][2] = 0x04; // 0000 0100
+	fonts['a'][3] = 0x3C; // 0011 1100
+	fonts['a'][4] = 0x44; // 0100 0100
+	fonts['a'][5] = 0x44; // 0100 0100
+	fonts['a'][6] = 0x7C; // 0111 1100
+	fonts['a'][7] = 0x00; // 0000 0000
+
+
+	// A
 	printf("\n[Default]\n");
 	PrintFont('A');
 
@@ -56,13 +129,165 @@ int main()
 	Underline('A');
 
 	printf("\n[Invert]\n");
-	Invert('A');
+Invert('A');
 
 	printf("\n[Italic]\n");
 	Italic('A');
 
 	printf("\n[Outline]\n");
 	Outline('A');
+
+	// B
+	printf("\n[Default]\n");
+	PrintFont('B');
+
+	printf("\n[Bold]\n");
+	Bold('B');
+
+	printf("\n[Underline]\n");
+	Underline('B');
+
+	printf("\n[Invert]\n");
+	Invert('B');
+
+	printf("\n[Italic]\n");
+	Italic('B');
+
+	printf("\n[Outline]\n");
+	Outline('B');
+
+	// C
+	printf("\n[Default]\n");
+	PrintFont('C');
+
+	printf("\n[Bold]\n");
+	Bold('C');
+
+	printf("\n[Underline]\n");
+	Underline('C');
+
+	printf("\n[Invert]\n");
+	Invert('C');
+
+	printf("\n[Italic]\n");
+	Italic('C');
+
+	printf("\n[Outline]\n");
+	Outline('C');
+
+	// D
+	printf("\n[Default]\n");
+	PrintFont('D');
+
+	printf("\n[Bold]\n");
+	Bold('D');
+
+	printf("\n[Underline]\n");
+	Underline('D');
+
+	printf("\n[Invert]\n");
+	Invert('D');
+
+	printf("\n[Italic]\n");
+	Italic('D');
+
+	printf("\n[Outline]\n");
+	Outline('D');
+
+	// E
+	printf("\n[Default]\n");
+	PrintFont('E');
+
+	printf("\n[Bold]\n");
+	Bold('E');
+
+	printf("\n[Underline]\n");
+	Underline('E');
+
+	printf("\n[Invert]\n");
+	Invert('E');
+
+	printf("\n[Italic]\n");
+	Italic('E');
+
+	printf("\n[Outline]\n");
+	Outline('E');
+
+	// H
+	printf("\n[Default]\n");
+	PrintFont('H');
+
+	printf("\n[Bold]\n");
+	Bold('H');
+
+	printf("\n[Underline]\n");
+	Underline('H');
+
+	printf("\n[Invert]\n");
+	Invert('H');
+
+	printf("\n[Italic]\n");
+	Italic('H');
+
+	printf("\n[Outline]\n");
+	Outline('H');
+
+	// J
+	printf("\n[Default]\n");
+	PrintFont('J');
+
+	printf("\n[Bold]\n");
+	Bold('J');
+
+	printf("\n[Underline]\n");
+	Underline('J');
+
+	printf("\n[Invert]\n");
+	Invert('J');
+
+	printf("\n[Italic]\n");
+	Italic('J');
+
+	printf("\n[Outline]\n");
+	Outline('J');
+
+	// X
+	printf("\n[Default]\n");
+	PrintFont('X');
+
+	printf("\n[Bold]\n");
+	Bold('X');
+
+	printf("\n[Underline]\n");
+	Underline('X');
+
+	printf("\n[Invert]\n");
+	Invert('X');
+
+	printf("\n[Italic]\n");
+	Italic('X');
+
+	printf("\n[Outline]\n");
+	Outline('X');
+
+	// a
+	printf("\n[Default]\n");
+	PrintFont('a');
+
+	printf("\n[Bold]\n");
+	Bold('a');
+
+	printf("\n[Underline]\n");
+	Underline('a');
+
+	printf("\n[Invert]\n");
+	Invert('a');
+
+	printf("\n[Italic]\n");
+	Italic('a');
+
+	printf("\n[Outline]\n");
+	Outline('a');
 
 	printf("\n");
 	return 1;
@@ -83,7 +308,7 @@ void PrintFont(unsigned char targetChar)
 {
 	int row = 0;
 	int column = 0;
-	unsigned long int mask = 0;
+	unsigned char mask = 0;
 
 	printf("  | 84218421 |\n");
 	printf("-----------------\n");
@@ -93,7 +318,7 @@ void PrintFont(unsigned char targetChar)
 		printf("%d | ", row);
 		for( column = 0; column < NUM_OF_BIT; column++)
 		{
-			printf("%c", ((unsigned long int)(fonts[targetChar][row]) & mask) == 0 ? ' ' : '#');
+			printf("%c", (unsigned char)((fonts[targetChar][row]) & mask) == 0 ? ' ' : '#');
 			mask >>= 1;
 		}
 		printf(" | %02X", (unsigned int)(fonts[targetChar][row]));
@@ -148,8 +373,8 @@ void Invert(unsigned char targetChar)
 void Bold(unsigned char targetChar)
 {
 	int bytePos = 0;
-	unsigned char originalFont[1][MAX_FONT_BYTE] = {{ 0 }};
-	memcpy(originalFont[0], fonts[targetChar], MAX_FONT_BYTE);
+	unsigned char originalFont[MAX_FONT_BYTE] = { 0 };
+	memcpy(originalFont, fonts[targetChar], MAX_FONT_BYTE);
 
 	for( ; bytePos < MAX_FONT_BYTE; bytePos++)
 	{
@@ -158,7 +383,7 @@ void Bold(unsigned char targetChar)
 
 	PrintFont(targetChar);
 
-	memcpy(fonts[targetChar], originalFont[0], MAX_FONT_BYTE);
+	memcpy(fonts[targetChar], originalFont, MAX_FONT_BYTE);
 }
 
 /**
@@ -171,20 +396,20 @@ void Bold(unsigned char targetChar)
 void Italic(unsigned char targetChar)
 {
 	int bytePos = 1;
-	int rightShiftCount = MAX_FONT_BYTE - 4;
-	unsigned char originalFont[1][MAX_FONT_BYTE] = {{ 0 }};
-	memcpy(originalFont[0], fonts[targetChar], MAX_FONT_BYTE);
+	int rightShiftCount = MAX_FONT_BYTE - 3;
+	unsigned char originalFont[MAX_FONT_BYTE] = { 0 };
+	memcpy(originalFont, fonts[targetChar], MAX_FONT_BYTE);
 
 	for( ; bytePos < (MAX_FONT_BYTE - 3); bytePos++)
 	{
-		fonts[targetChar][bytePos] = (unsigned char)(fonts[targetChar][bytePos] >> (rightShiftCount / 2));
+		fonts[targetChar][bytePos] = (unsigned char)(fonts[targetChar][bytePos] >> (rightShiftCount / 3));
 		rightShiftCount--;
 	}
 	fonts[targetChar][MAX_FONT_BYTE - 2] = (unsigned char)(fonts[targetChar][MAX_FONT_BYTE - 2] << 1);
 
 	PrintFont(targetChar);
 
-	memcpy(fonts[targetChar], originalFont[0], MAX_FONT_BYTE);
+	memcpy(fonts[targetChar], originalFont, MAX_FONT_BYTE);
 }
 
 /**
@@ -197,20 +422,21 @@ void Italic(unsigned char targetChar)
 void Outline(unsigned char targetChar)
 {
 	int bytePos = 0;
-	unsigned char originalFont[1][MAX_FONT_BYTE] = {{ 0 }};
-	memcpy(originalFont[0], fonts[targetChar], MAX_FONT_BYTE);
+	unsigned char originalFont[MAX_FONT_BYTE] = { 0 };
+	memcpy(originalFont, fonts[targetChar], MAX_FONT_BYTE);
+
+	fonts[targetChar][0] = fonts[targetChar][0] | (unsigned char)(fonts[targetChar][1]);
+	fonts[targetChar][MAX_FONT_BYTE - 1] = fonts[targetChar][MAX_FONT_BYTE - 1] | (unsigned char)(fonts[targetChar][MAX_FONT_BYTE - 2]);
 
 	for( ; bytePos < MAX_FONT_BYTE; bytePos++)
 	{
 		fonts[targetChar][bytePos] = fonts[targetChar][bytePos] | (unsigned char)(fonts[targetChar][bytePos] >> 1);
 		fonts[targetChar][bytePos] = fonts[targetChar][bytePos] | (unsigned char)(fonts[targetChar][bytePos] << 1);
-		fonts[targetChar][bytePos] = fonts[targetChar][bytePos] ^ originalFont[0][bytePos];
+		fonts[targetChar][bytePos] = fonts[targetChar][bytePos] ^ originalFont[bytePos];
 	}
-	fonts[targetChar][0] = 0x38; // 0011 1000
-	fonts[targetChar][MAX_FONT_BYTE - 1] = 0xee; // 1110 1110
 
 	PrintFont(targetChar);
 
-	memcpy(fonts[targetChar], originalFont[0], MAX_FONT_BYTE);
+	memcpy(fonts[targetChar], originalFont, MAX_FONT_BYTE);
 }
 
